@@ -38,5 +38,6 @@ class Main{
             v.removeAllElements();
             t--;
         }
+        sc.close();
     }
 }
