@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <queue>
+#include <iostream>
 
 using namespace std;
 
@@ -71,7 +72,6 @@ int solution(vector<int> picks, vector<string> minerals) {
     
     while(!saveSum.empty()&&!tools.empty()){
         int startIdx=saveSum.top().second;
-        cout<<saveSum.top().first<<" ijijij"<< startIdx<<endl;
         string curTool=tools.front();
         
         int toolIdx=mintToCost(curTool);
@@ -88,6 +88,7 @@ int solution(vector<int> picks, vector<string> minerals) {
             int curIdx=startIdx+i;
             string curMinerals=minerals[curIdx];
             int mineralIdx=mintToCost(curMinerals);
+
             answer+=costPlan[toolIdx][mineralIdx];
         }  
         }
