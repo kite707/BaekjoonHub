@@ -1,32 +1,33 @@
 #include <iostream>
-#include <queue>
+#include <list>
 using namespace std;
 
-int main() {
-	int n, k;
-	cin >> n >> k;
-	queue <int> d;
-	for (int i = 1; i <= n; i++) {
-		d.push(i);
-	}
-	int idx = 1;
-	cout << "<";
-	while (!d.empty()) {
-		if (d.size() == 1) {
-			cout << d.front() << ">";
-			d.pop();
-		}
-		else if (idx % k == 0) {
-			cout << d.front() << ", ";
-			d.pop();
-			++idx;
-		}
-		else {
-			++idx;
-			int a = d.front();
-			d.pop();
-			d.push(a);
-		}
-		
-	}
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+   int N,K;
+   cin>>N>>K;
+   list<int> li;
+    auto cursor = li.end();
+    for(int i=1;i<=N;i++){
+       li.insert(cursor,i);
+   }
+    cursor = li.begin();
+   cout<<"<";
+   while(li.size()!=1){
+       for(int i=1;i<K;i++){
+           if(cursor==--li.end()){
+               cursor=li.begin();
+           }
+           else{cursor++;}
+       }
+       cout<<*cursor<<", ";
+       cursor=li.erase(cursor);
+       if(cursor==li.end()){
+           cursor = li.begin();
+       }
+   }
+   cout<<*li.begin()<<">";
+
 }
