@@ -2,7 +2,7 @@
 using namespace std;
 
 long long num1,num2,num3;
-long long solution(long long a, long long b, long long c){
+long long solution(int a, int b, int c){
     if(b==1)return a%c;
     long long tmp = solution(a,b/2,c);
     tmp = tmp*tmp%c;
