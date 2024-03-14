@@ -1,32 +1,33 @@
 #include <iostream>
+#include <vector>
 using namespace std;
-
+vector<int> vec;
+bool checker[9];
+int saver[9];
 int N,M;
-int answer[9];
-int checker[9];
-
-void backTracking(int start){
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    if(start>M){
-     for(int i=1;i<=M;i++){
-         cout<<answer[i]<<" ";
-     }
-     cout<<'\n';
-    }else{
-        for(int i=1;i<=N;i++){
-            if(checker[i]==0){
-                checker[i]=1;
-                answer[start]=i;
-                backTracking(start+1);
-                checker[i]=0;
-            }
+void solution(int depth){
+    if(depth==M){
+        for(int i=0;i<M;i++){
+            cout<<saver[i]<<" ";
+        }
+        cout<<"\n";
+        return;
+    }
+    for(int i=1;i<=N;i++){
+        if(!checker[i]){
+            saver[depth]=i;
+            checker[i]=true;
+            solution(depth+1);
+            checker[i]=false;
         }
     }
 }
 
 int main(){
-cin>>N>>M;
-    backTracking(1);
+    ios::sync_with_stdio(false);
+    cin.tie(0);
 
+
+    cin>>N>>M;
+    solution(0);
 }
