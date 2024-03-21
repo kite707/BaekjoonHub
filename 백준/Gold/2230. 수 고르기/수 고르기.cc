@@ -4,7 +4,7 @@
 #include <queue>
 using namespace std;
 
-//이분탐색 풀이
+//투포인터 풀이
 vector<int> v;
 int main(){
     ios::sync_with_stdio(false);
@@ -17,19 +17,21 @@ int main(){
         v.push_back(t);
     }
     sort(v.begin(),v.end());
-    for(int i=0;i<v.size();i++){
-        int curNum = v[i];
-        int toFind=v[i]-m;
-        //cout<<"toFind is "<<toFind<<endl;
-        if(binary_search(v.begin(),v.end(),toFind)){
+    int st=0;
+    int en=0;
+    while(en<v.size()){
+        if(v[en]-v[st]==m){
             cout<<m;
             return 0;
         }
-        int idx= lower_bound(v.begin(),v.end(),toFind)-v.begin()-1;
-        if(idx<0)continue;
-        if(curNum-v[idx]>=m){
-            q.push(curNum-v[idx]);
+        else if(v[en]-v[st]<m){
+            en++;
+        }
+        else{
+            q.push(v[en]-v[st]);
+            st++;
         }
     }
     cout<<q.top();
+
 }
