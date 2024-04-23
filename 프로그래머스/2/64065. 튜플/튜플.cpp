@@ -1,48 +1,25 @@
-#include <string>
-#include <vector>
-#include <iostream>
-#include <set>
-#include <algorithm>
+#include <bits/stdc++.h>
 using namespace std;
 
-bool arr[100001];
-bool comp(set<int> a, set<int> b){
-    return a.size()<b.size();
-}
-
 vector<int> solution(string s) {
+    int st[101010]={};
     vector<int> answer;
-    vector<set<int>> uni;
-    set<int> tmp;
-    string str="";
-    for(int i=1;i<s.length()-1;i++){
-        if(s[i]=='{'){
-            str="";
-            tmp.clear();
-            continue;
-        }else if(s[i]=='}'){
-            tmp.insert(stoi(str));
-            uni.push_back(tmp);
-           
-        }else if(s[i]==','){
-            tmp.insert(stoi(str));
-            str="";
-        }else{
-            str+=s[i];
+    string tmp;
+    for(char i: s){
+        if(i-'0' >=0 && i-'0' <=9){
+            tmp += i;
+        }
+        else{
+            if(tmp.length())
+                st[stoi(tmp)]++, tmp.clear();
         }
     }
-    sort(uni.begin(),uni.end(),comp);
-    for(int i=0;i<uni.size();i++){
-        for(auto k:uni[i]){
-            //cout<<k<<" ";
-            if(!arr[k]){
-                answer.push_back(k);
-                arr[k]=true;
-            }
-        }
-       // cout<<endl;
-    }
-    
-    cout<<endl;
+    vector<pair<int, int>> v;
+    for(int i =0; i <101010; i++)
+        if(st[i])
+            v.push_back({st[i], i});
+    sort(v.begin(), v.end());
+    reverse(v.begin(),v.end());
+    for(auto it: v) answer.push_back(it.second);
     return answer;
 }
