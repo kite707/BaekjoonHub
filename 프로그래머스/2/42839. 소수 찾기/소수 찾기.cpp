@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <algorithm>
 #include <unordered_set>
 using namespace std;
 
@@ -11,7 +12,6 @@ unordered_set<int> st;
 
 bool isPrime(int n){
     if(n<2)return false;
-    if(n==3)return true;
     for(int i=2;i*i<=n;i++){
         if(n%i==0)return false;
     }
@@ -43,7 +43,7 @@ int solution(string numbers) {
     for(auto k: st){
         //cout<<k<<endl;
         if(isPrime(k)){
-            //cout<<k<<"는 소수입니다"<<endl;
+            cout<<k<<"는 소수입니다"<<endl;
             answer++;
         }
     }
