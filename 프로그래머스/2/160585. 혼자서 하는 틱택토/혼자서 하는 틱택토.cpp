@@ -3,96 +3,61 @@
 #include <iostream>
 
 using namespace std;
-int SIZE = 3;
+//만약 동그라미 완성이라면 x하나 적기. x완성이라면 o와 x개수 같기
 
-bool test(vector <string> board, int oNumber, int xNumber){
-    int sameO = 0;
-    int sameX = 0;
-    //가로
-    for(int i=0;i<SIZE;i++){
-        string curLine = board[i];
-        if(curLine == "OOO"){
-            sameO++;
-        }
-        if(curLine =="XXX"){
-            cout<<"가로"<<endl;
-            sameX++;
+int countValidator(vector<string> board){
+    int circle=0;
+    int x=0;
+    for(int i=0;i<board.size();i++){
+        for(auto k: board[i]){
+            if(k=='O')circle++;
+            if(k=='X')x++;
         }
     }
-    //세로
-    string tmp="";
-    for(int i=0;i<SIZE;i++){
-        for(int j=0;j<SIZE;j++){
-            string curLine = board[j];
-            char current = curLine[i];
-            tmp+=current;
-        }
-        if(tmp =="OOO"){
-            sameO++;
-        }
-        if(tmp=="XXX"){
-            cout<<"세로"<<endl;
-            sameX++;
-        }
-        tmp="";
-    }
-    //대각
-    for(int i=0;i<SIZE;i++){
-        tmp+=board[i][i];
-    }
-    if(tmp=="OOO"){
-        sameO++;
-    } else if(tmp=="XXX"){
-        cout<<"대각1"<<endl;
-        sameX++;
-    }
-    tmp="";
-    for(int i=SIZE-1;i>=0;i--){
-     tmp+=board[i][2-i];   
-    }
-    if(tmp=="OOO"){
-        sameO++;
-    } else if(tmp=="XXX"){
-        cout<<"대각2"<<endl;
-        sameX++;
-    }
-    
-    cout<<"sameX is "<<sameX<<endl;
-    cout<<"sameO is "<<sameO<<endl;
-   if(sameO==0&&sameX==0){
-       return false;
-   }
-    if(sameO ==0&&sameX==1&&(oNumber == xNumber)){
-        return false;
-    }
-    if(sameO>0&&sameX==0&&(oNumber==xNumber+1)){
-        return false;
-    }
-    return true;
+    return circle-x;
 }
 
+bool completeValidator(vector<string> board, char c){
+    //가로
+    for(int i=0;i<3;i++){
+        bool flag=true;
+        for(int j=0;j<3;j++){
+            if(board[i][j]!=c){flag=false;continue;}
+        }
+        if(flag)return true;
+    }
+    //세로
+    for(int i=0;i<3;i++){
+        bool flag=true;
+        for(int j=0;j<3;j++){
+            if(board[j][i]!=c){flag=false;continue;}
+        }
+        if(flag)return true;
+    }
+    //대각선
+    bool flag1=true;
+    for(int i=0;i<3;i++){
+        if(board[i][i]!=c)flag1=false;
+    }
+    if(flag1)return true;
+    
+    bool flag2=true;
+    for(int i=0;i<3;i++){
+        if(board[2-i][i]!=c)flag2=false;
+    }
+    if(flag2)return true;
+    return false;
+}
+
+
 int solution(vector<string> board) {
-    int answer = 1;
-    int oNumber = 0;
-    int xNumber = 0;
-    for(int i=0;i<SIZE;i++){
-        string curLine = board[i];
-        for(int j=0;j<SIZE;j++){
-            char current = curLine[j];
-            if(current == 'O'){
-                oNumber++;
-            }else if (current =='X'){
-                xNumber++;
-            }
-        }
-    }
-    int sub = oNumber-xNumber;
-    if(sub<0 || sub >1){
-        answer = 0;
-    }else{
-        if(test(board,oNumber,xNumber)){
-            answer = 0;
-        }
-    }
-    return answer;
+    int answer = -1;
+    answer=countValidator(board);
+    cout<<answer<<endl;
+    if(answer!=0&&answer!=1)return 0;
+    
+    if(completeValidator(board,'O')&&answer!=1) return 0;
+    if(completeValidator(board,'X')&&answer!=0) return 0;
+    return 1;
+    
 }
