@@ -5,50 +5,52 @@
 #include <algorithm>
 using namespace std;
 
-bool isNumber(char c){
-    return (c-'0'>=0&&c-'0'<=9);
+bool isNum(char c){
+    if(c<'0')return false;
+    if(c>'9')return false;
+    return true;
 }
 
-bool comp(tuple<string,int,int,string> a,tuple<string,int,int,string> b){
+bool cmp(tuple<string,int,int> a, tuple<string,int,int> b){
     if(get<0>(a)==get<0>(b)){
-        if(get<1>(a)==get<1>(b)){
-            return get<2>(a)<get<2>(b);
-        }
+        if(get<1>(a)==get<1>(b))return get<2>(a)<get<2>(b);
         return get<1>(a)<get<1>(b);
     }
     return get<0>(a)<get<0>(b);
 }
+
+
 vector<string> solution(vector<string> files) {
     vector<string> answer;
-    vector<tuple<string,int,int,string>> idx;
+    vector<tuple<string,int,int>> vec;
+    
+    //파일 가공
     for(int i=0;i<files.size();i++){
-        tuple<string, int,int,string> tp;
-        string curFile=files[i];
-        string tmp="";
+        string file=files[i];
         string head="";
         string number="";
         string tail="";
-        for(int j=0;j<curFile.length();j++){
-            if(head==""&&isNumber(curFile[j])){
-                head=tmp;
-                tmp="";
-            }else if(head!=""&&number==""&&!isNumber(curFile[j])){
-                number=tmp;
-                tmp="";
+        bool numberIsEmpty=true;
+        bool numberIsFilled=false;
+        for(int j=0;j<file.size();j++){
+            if(isNum(file[j])&&!numberIsFilled){
+                number+=file[j];
+                numberIsEmpty=false;
+            }else{
+                if(!numberIsEmpty)numberIsFilled=true;
+                if(numberIsEmpty){
+                    head+=toupper(file[j]);
+                }else{
+                    tail+=file[j];
+                }
             }
-            tmp+=toupper(curFile[j]);
         }
-        //cout<<head<<" "<<stoi(number)<<" "<<tmp<<endl;
-        if(number==""){
-            number=tmp;
-        }
-        tp={head,stoi(number),i,tmp};
-        idx.push_back(tp);
+        tuple<string,int,int> tmp ={head,stoi(number),i};
+        vec.push_back(tmp);
     }
-    sort(idx.begin(),idx.end(),comp);
-    for(int i=0;i<idx.size();i++){
-        int ix= get<2>(idx[i]);
-        answer.push_back(files[ix]);
+    sort(vec.begin(),vec.end());
+    for(int i=0;i<vec.size();i++){
+        answer.push_back(files[get<2>(vec[i])]);
     }
 
     return answer;
