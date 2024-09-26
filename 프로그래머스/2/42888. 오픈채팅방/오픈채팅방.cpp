@@ -1,34 +1,35 @@
 #include <string>
 #include <vector>
 #include <sstream>
-#include <unordered_map>
 #include <iostream>
+#include <unordered_map>
+
 using namespace std;
+
+unordered_map<string,string> mp; //id nick
 
 vector<string> solution(vector<string> record) {
     vector<string> answer;
-    unordered_map<string,string> mp;
-    string oper,userId,nick;
-    for(int i=0;i<record.size();i++){
-        istringstream ss(record[i]);
-        ss>>oper>>userId>>nick;
-        if(oper!="Leave"){
-            mp[userId]=nick;
-            //cout<<oper<<" "<<userId<<" "<<nick<<endl;
-        }
+    for(string rec:record){
+        istringstream st(rec);
+        string tmp;
+        string key,id,nick;
+        st>>key>>id>>nick;
+        if(!nick.empty())mp[id]=nick;
     }
-    for(int i=0;i<record.size();i++){
-        istringstream ss(record[i]);
-        ss>>oper>>userId>>nick;
-        string tmp="";
-        if(oper=="Enter"){
-            tmp+=mp[userId]+"님이 들어왔습니다.";
-        }else if(oper=="Leave"){
-            tmp+=mp[userId]+"님이 나갔습니다.";
-        }else{
-            continue;
-        }
-        answer.push_back(tmp);
+    
+    for(string rec:record){
+        istringstream st(rec);
+        string tmp;
+        string key,id,nick;
+        st>>key>>id>>nick;
+        string ans;
+        if(key=="Leave"){
+            ans=mp[id]+"님이 나갔습니다.";
+        }else if(key=="Enter"){
+            ans=mp[id]+"님이 들어왔습니다.";
+        }else continue;
+        answer.push_back(ans);
     }
     return answer;
 }
