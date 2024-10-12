@@ -1,13 +1,11 @@
 #include <iostream>
 using namespace std;
 
-long long num1,num2,num3;
-long long solution(int a, int b, int c){
+long long mult(int a,int b,int c){
     if(b==1)return a%c;
-    long long tmp = solution(a,b/2,c);
-    tmp = tmp*tmp%c;
-    if(b%2==0)return tmp;
-    return num1*tmp%c;
+    long long tmp = mult(a,b/2,c);
+    if(b%2==0)return tmp*tmp%c;
+    return tmp*tmp%c*a%c;
 }
 
 int main(){
@@ -15,7 +13,12 @@ int main(){
     cin.tie(0);
     cout.tie(0);
 
+    int a;
+    int b;
+    int c;
 
-    cin>>num1>>num2>>num3;
-    cout<<solution(num1,num2,num3);
+    cin>>a>>b>>c;
+
+    cout<<mult(a,b,c);
+
 }
