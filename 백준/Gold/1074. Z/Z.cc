@@ -1,41 +1,33 @@
-#include <iostream>
+// 시작점 y, x인곳의 길이가 n이고 시작숫자는 k인 함수
+// y,x / y,x+n/2 / y+n/2,x / y+n/2, x+n/2
+//숫자는 n*n/4씩 추가됨
 
+#include <iostream>
 using namespace std;
 
-int n, r, c;
-int ans;
+int N,r,c;
 
-void Z(int y, int x, int size)
-{
-    if (y == r && x == c)
-    {
-        cout << ans << '\n';
-        return;
+int zMove(int y, int x, long long n){
+    if(n==1){
+        return 0;
     }
-
-    // r,c가 현재 사분면에 존재한다면
-    if (r < y + size && r >= y && c < x + size && c >= x)
-    {
-        // 1사분면 탐색
-        Z(y, x, size / 2);
-        // 2사분면 탐색
-        Z(y, x + size / 2, size / 2);
-        // 3사분면 탐색
-        Z(y + size / 2, x, size / 2);
-        // 4사분면 탐색
-        Z(y + size / 2, x + size / 2, size / 2);
-    }
-    else
-    {
-        ans += size * size;
-    }
+    long long block = (n/2)*(n/2);
+    if(y<n/2&&x<n/2)return zMove(y,x,n/2);
+    else if(y<n/2&&x>=n/2)return zMove(y,x-n/2,n/2)+block;
+    else if(y>=n/2&&x<n/2)return zMove(y-n/2,x,n/2)+block*2;
+    else return zMove(y-n/2,x-n/2,n/2)+block*3;
 }
-int main()
-{
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
 
-    cin >> n >> r >> c;
-    Z(0, 0, (1 << n));
-    return 0;
+
+
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
+    cin>>N>>r>>c;
+    long long len=2<<(N-1);
+    cout<<zMove(r,c,len);
+
+
 }
