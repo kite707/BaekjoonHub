@@ -39,7 +39,7 @@ int solution(vector<int> diffs, vector<int> times, long long limit) {
         
         long long res=getTime(diffs,times,mid);
         
-        if(res<limit){
+        if(res<=limit){
             max=mid;
         }else{
             min=mid+1;
