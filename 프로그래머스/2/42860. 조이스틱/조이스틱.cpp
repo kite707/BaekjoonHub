@@ -4,22 +4,23 @@
 #include <iostream>
 using namespace std;
 
-int getStep(char b){
-    int tmp = b-'A';
-    return min(26-tmp, tmp);
+int toMake(char ch){
+    return min(ch-'A','Z'+1-ch);
 }
+
 
 int solution(string name) {
     int answer = 0;
-    int turn=name.length()-1;
-    for(int i=0;i<name.length();i++){
-        answer+=getStep(name[i]);
+    
+    int minMove=name.size()-1;
+    for(int i=0;i<name.size();i++){
+        answer+=toMake(name[i]);
         
-        int n=i+1;
-        while(n<name.length()&&name[n]=='A')n++;
-        int a=i;
-        int b=name.length()-n;
-        turn=min(turn, a+b+min(a,b));
+        int j=i+1;
+        while(j<name.size()&&name[j]=='A')j++;
+        int tmp=min(i*2+name.size()-j,(name.size()-j)*2+i);
+        minMove=min(minMove,tmp);
     }
-    return answer+turn;
+    answer+=minMove;
+    return answer;
 }
