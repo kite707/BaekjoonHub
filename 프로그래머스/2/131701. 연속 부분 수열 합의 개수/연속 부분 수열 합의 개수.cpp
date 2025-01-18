@@ -1,38 +1,19 @@
 #include <string>
 #include <vector>
-#include <iostream>
-#include <algorithm>
+#include <set>
+
 
 using namespace std;
-int arr[1000001];
-
+int arr[1001];
 
 int solution(vector<int> elements) {
-    int answer = 0;
-    for(int i=0;i<elements.size();i++){
-        if(arr[elements[i]]==0){
-            arr[elements[i]]++;
-            answer++;
+    int N = elements.size();
+    set<int> s;
+    for(int i=0;i<N;i++){
+        for(int j = 0; j<N;j++){
+            arr[j]+=elements[(i+j)%N];
+            s.insert(arr[j]);
         }
     }
-    //cout<<"answer is "<<answer<<endl;
-    for(int depth = 2;depth<=elements.size();depth++){
-        
-        for(int j=0;j<elements.size();j++){
-            int sum = 0;
-            for(int i=0;i<depth;i++){
-            sum+= elements[i];
-        }
-            //cout<<"sum is "<<sum<<endl;
-        if(arr[sum]==0){
-            arr[sum]++;
-            answer++;
-        }
-        int num = elements[0];
-        elements.erase(elements.begin());
-        elements.push_back(num);
-        }
-        
-    }
-    return answer;
+    return s.size();
 }
