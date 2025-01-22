@@ -1,71 +1,71 @@
-#include <string>
-#include <vector>
 #include <iostream>
+#include <vector>
 #include <algorithm>
 using namespace std;
 
-//오 아 왼 위
-int dx[4]={1,0,-1,0};
-int dy[4]={0,1,0,-1};
+bool arr[501][501][4]; //상 우 하 좌
 
-int visited[501][501][4]; //방문여부
+int dx[4] = {0, 1, 0, -1};
+int dy[4] = {-1, 0, 1, 0};
 
-int changeRight(int dir){
-    return (dir+1)%4;
-}
-int changeLeft(int dir){
-    return (dir==0)?3:dir-1;
+int setDirection(int curDirection, char dir){
+    if(dir=='S')return curDirection;
+    if(dir=='R')return (curDirection+1)%4;
+    return curDirection-1<0?3:curDirection-1;
 }
 
-int getCycle(int y,int x, int dir,vector<string> grid){
-    int cnt=0;
-    //cout<<"y x dir is : "<<y<<" "<<x<<" "<<dir<<endl;
+
+
+int light(int y, int x,int curDirection, vector<string> grid){
+    int len = 0;
     
-    int curY=y;
+    int dir=curDirection;
     int curX=x;
-    int curDir=dir;
-    int num=grid[0].size()-1;
-    while(!visited[curY][curX][curDir]){
-        cnt++;
-        visited[curY][curX][curDir]=true;
-        //cout<<"curdir dy dx is "<<curDir<<" "<<dy[curDir]<<" "<<dx[curDir]<<endl;
-        int nxtY=curY+dy[curDir];
-        int nxtX=curX+dx[curDir];
-        //cout<<"원래 nxt좌표들 "<<nxtY<<"  "<<nxtX<<endl;
-        //cout<<grid[0].size()<<endl;
+    int curY=y;
+    while(true){
+        if(arr[curY][curX][dir]){
+            //cout<<curY<<" "<<curX<<" "<<dir<<"에서 break\n";
+            break;
+        }
+        //cout<<"curY curX direction is "<<curY<<" "<<curX<<" "<<dir<<endl;
+        arr[curY][curX][dir]=true;
+        len++;
+        
+        int nxtY=curY+dy[dir];
+        int nxtX=curX+dx[dir];
+        //cout<<"[bf]nxtY nxtX is "<<nxtY<<" "<<nxtX<<endl;
         
         if(nxtY<0)nxtY=grid.size()-1;
-        if(nxtY>grid.size()-1)nxtY=0;
-        if(nxtX>num)nxtX=0;
+        if(nxtY>=grid.size())nxtY=0;
         if(nxtX<0)nxtX=grid[0].size()-1;
-        
-        if(grid[nxtY][nxtX]=='R'){
-            curDir=changeRight(curDir);
-            //cout<<"오른쪽 회전"<<endl;
-            }
-        if(grid[nxtY][nxtX]=='L'){
-            curDir=changeLeft(curDir);
-            //cout<<"왼쪽 회전"<<endl;
-        }
-        
-        curY=nxtY;
+        if(nxtX>=grid[0].size())nxtX=0;
+        //cout<<"[aft]nxtY nxtX dir is "<<nxtY<<" "<<nxtX<<" "<<dir<<endl;
+
         curX=nxtX;
-        //cout<<"new cur y x dir is : "<<curY<<"  "<<curX<<"  "<<curDir<<endl;
-        
+        curY=nxtY;
+        char curChar=grid[curY][curX];
+        dir=setDirection(dir,curChar);
     }
-    //cout<<"cnt is "<<cnt<<endl;
-    return cnt;
+    return len;
+    
 }
 
 vector<int> solution(vector<string> grid) {
     vector<int> answer;
-    for(int i=0;i<grid.size();i++){
-        for(int j=0;j<grid[0].size();j++){
-            for(int dir=0;dir<4;dir++){
-                if(!visited[i][j][dir])answer.push_back(getCycle(i,j,dir,grid));
-            }     
+    int width=grid[0].size();
+    int length=grid.size();
+    //cout<<"width length: "<<width<<" "<<length<<endl;
+    
+    for(int i=0;i<length;i++){
+        for(int j=0;j<width;j++){
+            for(int k=0;k<4;k++){
+                if(!arr[i][j][k]){
+                    //순회하고 길이 answer에 넣기
+                    answer.push_back(light(i,j,k,grid));
+                }
+            }
         }
     }
-    sort(answer.begin(),answer.end());        
+    sort(answer.begin(),answer.end());
     return answer;
 }
